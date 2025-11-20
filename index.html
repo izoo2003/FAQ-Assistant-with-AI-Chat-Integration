@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FAQ Chatbot</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; }
+  #chatbox { width: 500px; max-width: 100%; margin: 0 auto; border: 1px solid #ccc; background: #fff; padding: 10px; height: 400px; overflow-y: auto; }
+  .user { text-align: right; color: white; background: #007bff; padding: 5px 10px; margin: 5px 0; border-radius: 10px; display: inline-block; }
+  .bot { text-align: left; color: black; background: #e2e2e2; padding: 5px 10px; margin: 5px 0; border-radius: 10px; display: inline-block; }
+  #inputForm { width: 500px; max-width: 100%; margin: 10px auto; display: flex; }
+  #question { flex: 1; padding: 5px; font-size: 16px; }
+  #sendBtn { padding: 5px 10px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center;">FAQ Chatbot</h2>
+
+<div id="chatbox"></div>
+
+<div id="inputForm">
+  <input type="text" id="question" placeholder="Type your question..." />
+  <button id="sendBtn">Send</button>
+</div>
+
+<script>
+const chatbox = document.getElementById("chatbox");
+const questionInput = document.getElementById("question");
+const sendBtn = document.getElementById("sendBtn");
+
+function addMessage(content, sender) {
+    const div = document.createElement("div");
+    div.className = sender;
+    div.textContent = content;
+    chatbox.appendChild(div);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+async function sendQuestion() {
+    const question = questionInput.value.trim();
+    if (!question) return;
+    addMessage(question, "user");
+    questionInput.value = "";
+    
+    try {
+        const res = await fetch("http://127.0.0.1:5000/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question })
+        });
+        const data = await res.json();
+        addMessage(data.answer || "[No answer]", "bot");
+    } catch (err) {
+        addMessage("[Error connecting to API]", "bot");
+        console.error(err);
+    }
+}
+
+sendBtn.addEventListener("click", sendQuestion);
+questionInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendQuestion();
+});
+</script>
+
+</body>
+</html>

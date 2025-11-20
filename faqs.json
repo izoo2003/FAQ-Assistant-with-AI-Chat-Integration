@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "question": "What is the warranty period for Product X?",
+    "answer": "Product X has a 12-month limited warranty covering manufacturing defects."
+  },
+  {
+    "id": 2,
+    "question": "How do I reset my password?",
+    "answer": "Go to Settings → Account → Reset Password and follow the instructions on the email we send."
+  },
+  {
+    "id": 3,
+    "question": "Does Product X support international shipping?",
+    "answer": "Yes — we ship to most countries. Shipping fees and delivery times vary by destination."
+  }
+]
